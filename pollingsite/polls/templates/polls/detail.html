@@ -1,11 +1,14 @@
 <h1>Details</h1>
 {% if poll %}
 	<h2>{{ poll.question }}</h2>
-	<ul>
-	{% for choice in poll.choice_set.all %}
-		<li>{{ choice.choice_text }}</li>
-	{% endfor %}
-	</ul>
+	<form action="/polls/{{ poll.id }}/vote" method="post">
+		<ul>
+		{% for choice in poll.choice_set.all %}
+			<li><input type="radio" name="choice" value="{{ choice.id }}"/>{{ choice.choice_text }}</li>
+		{% endfor %}
+		</ul>
+		<input type="submit" value="Vote" />
+	</form>
 {% else %}
 	<p> No poll is passed </p>
 {% endif %}

@@ -11,10 +11,15 @@ def index(request):
 
 def detail(request, poll_id):
 	poll = Poll.objects.get(pk=poll_id)
-	return render(request, 'polls/detail.html', {'poll':poll})
+	return render(request, 'polls/detail.html', {'poll' : poll})
 
 def results(request, poll_id):
-	return HttpResponse("You are looking at the results of poll "+poll_id)
+	p = Poll.objects.get(pk=poll_id)
+	return render(request, 'polls/results.html', {'poll' : p})
 
 def vote(request, poll_id):
-	return HttpResponse("You are voting on poll "+poll_id)
+	poll = Poll.objects.get(pk=poll_id)
+	selected_choice = poll.choice_set.get(pk=request.POST['choice'])
+	selected_choice.votes += 1
+	selected_choice.save()
+	return render(request, 'polls/detail.html', {'poll' : poll})
